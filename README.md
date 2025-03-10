@@ -1,1 +1,1 @@
-# CleanArchitectureTemplate
+# Clean Architecture Template
