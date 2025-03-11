@@ -9,7 +9,8 @@ dotnet add package MediatR.Extensions.Microsoft.DependencyInjection
 ## Part 1: Sqliite
 
 ```bash
-dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Sqlite 
 
 ```
 ## Run Migrations
