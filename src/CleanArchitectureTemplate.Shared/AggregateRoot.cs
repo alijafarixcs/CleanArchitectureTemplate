@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CleanArchitectureTemplate.Shared.Interfaces;
+using PluralsightDdd.SharedKernel;
 
 namespace CleanArchitectureTemplate.Shared
 {
-    public abstract class AggregateRoot : Entity<Guid>
+    public abstract class AggregateRoot : Entity<Guid>,IAggregateRoot
     {
         protected AggregateRoot():base(Guid.NewGuid())
         {
@@ -16,11 +18,11 @@ namespace CleanArchitectureTemplate.Shared
         {
 
         }
-        private readonly List<IDomainEvent> _changes = new List<IDomainEvent>();
+        private readonly List<BaseDomainEvent> _changes = new List<BaseDomainEvent>();
 
         public int Version { get; private set; }
 
-        public IReadOnlyCollection<IDomainEvent> GetChanges()
+        public IReadOnlyCollection<BaseDomainEvent> GetChanges()
         {
             return _changes.AsReadOnly();
         }
@@ -30,18 +32,25 @@ namespace CleanArchitectureTemplate.Shared
             _changes.Clear();
         }
 
-        protected void ApplyDomainEvent(IDomainEvent domainEvent)
-        {
-            ChangeStateByUsingDomainEvent(domainEvent);
-            _changes.Add(domainEvent);
-            Version++;
-        }
-        public void Load(IEnumerable<IDomainEvent> history)
-        {
-            foreach (IDomainEvent domainEvent in history) 
-            { ApplyDomainEvent(domainEvent); }
-            ClearChanges();
-        }
-        protected abstract void ChangeStateByUsingDomainEvent(IDomainEvent domainEvent);
+     private readonly List<BaseDomainEvent> _domainEvents = new();
+
+ 
+
+    public Guid Id { get; init; }
+
+    public IReadOnlyList<BaseDomainEvent> GetDomainEvents()
+    {
+        return _domainEvents.ToList();
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
+    }
+
+    protected void RaiseDomainEvent(BaseDomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
     }
 }
