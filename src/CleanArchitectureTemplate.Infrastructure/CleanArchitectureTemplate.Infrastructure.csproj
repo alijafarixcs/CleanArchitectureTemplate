@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\CleanArchitectureTemplate.Shared\CleanArchitectureTemplate.Shared.csproj" />
+    <ProjectReference Include="..\CleanArchitectureTemplate.Application\CleanArchitectureTemplate.Application.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
