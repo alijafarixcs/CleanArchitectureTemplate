@@ -1,4 +1,6 @@
-# Clean Architecture ASP.NET Template
+# Clean Architecture ASP.NET Template# 
+[![Continuous Integration and Deployment](https://github.com/alijafarixcs/CleanArchitectureTemplate/actions/workflows/ci-cd.yaml/badge.svg)](https://github.com/alijafarixcs/CleanArchitectureTemplate/actions/workflows/ci-cd.yaml)
+
 
 ![Clean Architecture ASP.NET CleanArchitectureTemplate](https://github.com/alijafarixcs/Clean-Architecture-ASP.NET/blob/main/Graphics3.png?raw=true)
 
