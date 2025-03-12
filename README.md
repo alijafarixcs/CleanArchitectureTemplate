@@ -1,4 +1,4 @@
-# Clean Architecture ASP.NET Template# 
+# Clean Architecture ASP.NET Template
 [![countinus integration and deployment](https://github.com/alijafarixcs/ASP_EXAMPLES/actions/workflows/ci-cd.yaml/badge.svg)](https://github.com/alijafarixcs/CleanArchitectureTemplate/blob/main/.github/workflows/main.yml)
 
 
