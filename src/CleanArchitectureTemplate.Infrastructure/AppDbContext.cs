@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace CleanArchitectureTemplate.Infrastructure;
 public class AppDbContext : DbContext
 {
+    public AppDbContext()
+    {
+    }
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
