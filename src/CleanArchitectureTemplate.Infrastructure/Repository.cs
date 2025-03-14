@@ -2,61 +2,65 @@
 using CleanArchitectureTemplate.Shared.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Infrastructure;
 
 public class Repository : IRepository
 {
     private readonly AppDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public Repository(AppDbContext context)
+    public Repository(AppDbContext context, IUnitOfWork unitOfWork)
     {
         _context = context;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<T> GetByIdAsync<T, TId>(TId id) where T : Entity<TId>, IAggregateRoot
+    public async Task<T> GetByIdAsync<T, TId>(TId id, CancellationToken cancellationToken) where T : Entity<TId>, IAggregateRoot
     {
-        return await _context.Set<T>().FindAsync(id);
+        return await _context.Set<T>().FindAsync(new object[] { id }, cancellationToken);
     }
 
-    public async Task<T> GetAsync<T, TId>(ISpecification<T> spec) where T : Entity<TId>, IAggregateRoot
+    public async Task<T> GetAsync<T, TId>(ISpecification<T> spec, CancellationToken cancellationToken) where T : Entity<TId>, IAggregateRoot
     {
-        return await ApplySpecification(spec).FirstOrDefaultAsync();
+        return await ApplySpecification(spec).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<List<T>> ListAsync<T, TId>() where T : Entity<TId>, IAggregateRoot
+    public async Task<List<T>> ListAsync<T, TId>(CancellationToken cancellationToken) where T : Entity<TId>, IAggregateRoot
     {
-        return await _context.Set<T>().ToListAsync();
+        return await _context.Set<T>().ToListAsync(cancellationToken);
     }
 
-    public async Task<List<T>> ListAsync<T, TId>(ISpecification<T> spec) where T : Entity<TId>, IAggregateRoot
+    public async Task<List<T>> ListAsync<T, TId>(ISpecification<T> spec, CancellationToken cancellationToken) where T : Entity<TId>, IAggregateRoot
     {
-        return await ApplySpecification(spec).ToListAsync();
+        return await ApplySpecification(spec).ToListAsync(cancellationToken);
     }
 
-    public async Task<int> CountAsync<T, TId>(ISpecification<T> spec) where T : Entity<TId>, IAggregateRoot
+    public async Task<int> CountAsync<T, TId>(ISpecification<T> spec, CancellationToken cancellationToken) where T : Entity<TId>, IAggregateRoot
     {
-        return await ApplySpecification(spec).CountAsync();
+        return await ApplySpecification(spec).CountAsync(cancellationToken);
     }
 
-    public async Task<T> AddAsync<T, TId>(T entity) where T : Entity<TId>, IAggregateRoot
+    public async Task<T> AddAsync<T, TId>(T entity, CancellationToken cancellationToken) where T : Entity<TId>, IAggregateRoot
     {
-        await _context.Set<T>().AddAsync(entity);
-        await _context.SaveChangesAsync();
+        await _context.Set<T>().AddAsync(entity, cancellationToken);
+        await _unitOfWork.SaveChangesAsync();
         return entity;
     }
 
-    public async Task UpdateAsync<T, TId>(T entity) where T : Entity<TId>, IAggregateRoot
+    public async Task UpdateAsync<T, TId>(T entity, CancellationToken cancellationToken) where T : Entity<TId>, IAggregateRoot
     {
         _context.Set<T>().Update(entity);
-        await _context.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync<T, TId>(T entity) where T : Entity<TId>, IAggregateRoot
+    public async Task DeleteAsync<T, TId>(T entity, CancellationToken cancellationToken) where T : Entity<TId>, IAggregateRoot
     {
         _context.Set<T>().Remove(entity);
-        await _context.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     private IQueryable<T> ApplySpecification<T>(ISpecification<T> spec) where T : class

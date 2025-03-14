@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace PluralsightDdd.SharedKernel
+namespace CleanArchitectureTemplate.Shared
 {
   /// <summary>
   /// Integration events are used to communicate between bounded contexts and/or applications.

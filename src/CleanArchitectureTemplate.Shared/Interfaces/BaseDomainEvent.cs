@@ -1,9 +1,9 @@
 ﻿using System;
 using MediatR;
 
-namespace PluralsightDdd.SharedKernel
+namespace CleanArchitectureTemplate.Shared
 {
-  public abstract class BaseDomainEvent : INotification
+  public record BaseDomainEvent : INotification
   {
     public DateTimeOffset DateOccurred { get; protected set; } = DateTimeOffset.UtcNow;
   }
