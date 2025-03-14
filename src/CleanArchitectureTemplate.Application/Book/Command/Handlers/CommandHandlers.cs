@@ -51,8 +51,34 @@ namespace CleanArchitectureTemplate.Application.Command.Handlers
             // Save changes to the repository
             await _repository.UpdateAsync<Book, Guid>(book, cancellationToken);
         }
-    }
 
+    }
+ public class SellBookStockCommandHandler : IRequestHandler<SellBookStockCommand>
+    {
+        private readonly IRepository _repository;
+
+        public SellBookStockCommandHandler(IRepository repository)
+        {
+            _repository = repository;
+        }
+
+        public async Task Handle(SellBookStockCommand request, CancellationToken cancellationToken)
+        {
+            // Retrieve the book from the repository
+            var book = await _repository.GetByIdAsync<Book, Guid>(request.BookId, cancellationToken);
+            if (book == null)
+            {
+                throw new Exception("Book not found");
+            }
+
+            // Update the stock level of the book
+            // Assuming the stock update logic is handled in the domain model
+            book.SellBook(request.Quantity);
+            // Save changes to the repository
+            await _repository.UpdateAsync<Book, Guid>(book, cancellationToken);
+        }
+
+    }
     // Command Handler for updating book price
     public class UpdateBookPriceCommandHandler : IRequestHandler<UpdateBookPriceCommand>
     {

@@ -13,7 +13,11 @@ namespace CleanArchitectureTemplate.Application.Command
         public Guid BookId { get; set; }
         public int Quantity { get; set; }
     }
-
+    public class SellBookStockCommand : IRequest
+    {
+        public Guid BookId { get; set; }
+        public int Quantity { get; set; }
+    }
     public class AddBookCommand : IRequest
     {
         public Book Book { get; set; }
